@@ -35,3 +35,19 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# OS별 임시 파일
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log
+
+# 환경 변수 파일 (보안 관련)
+*.env
+
+# 실행 파일 및 배포용 파일
+*.jar
+*.war
+*.sh
+
