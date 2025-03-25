@@ -38,7 +38,7 @@ public class UserService {
         }
 
         if (userRegistory.existsByNickname(request.getNickname())){
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.")
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
 
         String hashedPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
