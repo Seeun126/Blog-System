@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprint.mission.sbblogsystem.domain.User;
 import com.sprint.mission.sbblogsystem.repository.UserRepository;
 import org.springframework.stereotype.Repository;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,8 @@ public class FileUserRepository implements UserRepository {
 
     private static final String FILE_PATH = "data/users.json";
     private final Map<String, User> userMap = new HashMap<>();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
 
     public FileUserRepository() {
         loadFromFile();

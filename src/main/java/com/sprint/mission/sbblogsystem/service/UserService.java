@@ -1,22 +1,25 @@
 package com.sprint.mission.sbblogsystem.service;
 
 import com.sprint.mission.sbblogsystem.domain.User;
+import com.sprint.mission.sbblogsystem.dto.LoginRequest;
 import com.sprint.mission.sbblogsystem.dto.UserRegisterRequest;
 import com.sprint.mission.sbblogsystem.repository.UserRepository;
 import com.sprint.mission.sbblogsystem.util.ValidationUtil;
+import com.sprint.mission.sbblogsystem.util.JwtUtil;
 import org.apache.el.util.Validation;
 import org.mindrot.jbcrypt.BCrypt;
-import org.mindrot.jbcrypt.Bcrypt;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
 @Service
 public class UserService {
-    private final UserRegistory userRegistory;
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     public UserService(UserRepository userRepository) {
-        this.userRegistory = userRepository;
+        this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public void register(UserRegisterRequest request) {
@@ -33,11 +36,11 @@ public class UserService {
             throw new IllegalArgumentException("닉네임은 50자 이하여야 합니다.");
         }
 
-        if (userRegistory.existsById(request.getId())){
+        if (userRepository.existsById(request.getId())){
             throw new IllegalArgumentException("이미 사용 중인 ID입니다.");
         }
 
-        if (userRegistory.existsByNickname(request.getNickname())){
+        if (userRepository.existsByNickname(request.getNickname())){
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
 
@@ -53,5 +56,20 @@ public class UserService {
 
         userRepository.save(user);
 
+    }
+
+    public String login(LoginRequest request) {
+        User user = userRepository.findById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        if (!BCrypt.checkpw(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return jwtUtil.generateToken(user.getId());
+    }
+
+    public boolean existsById(String userId) {
+        return userRepository.findById(userId).isPresent();
     }
 }

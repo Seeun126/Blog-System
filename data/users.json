@@ -1,0 +1,9 @@
+{
+  "user123" : {
+    "id" : "user123",
+    "password" : "$2a$10$T5DRf1u9w4yABCuA9rbVFO3ig57iC/f5LdowvvoaNTXhlsADCoivW",
+    "email" : "user@example.com",
+    "nickname" : "사용자닉네임",
+    "createdAt" : 1742879450.367679500
+  }
+}
